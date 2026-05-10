@@ -49,6 +49,7 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.core.ktx)
                 implementation(libs.androidx.activity.compose)
+                implementation(libs.android.material)
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.kotlinx.coroutines.android)
             }
