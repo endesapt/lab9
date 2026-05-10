@@ -30,6 +30,10 @@ jobs:
           cache: gradle
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+      - name: Prepare Android local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
       - name: Build Android and run Android unit tests
         run: bash ./gradlew :app:assembleDebug :app:testDebugUnitTest --stacktrace
 

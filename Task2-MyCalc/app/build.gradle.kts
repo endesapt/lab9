@@ -71,6 +71,8 @@ android {
     namespace = "com.example.mycalc"
     compileSdk = 35
 
+    sourceSets["main"].manifest.srcFile("src/main/AndroidManifest.xml")
+
     defaultConfig {
         applicationId = "com.example.mycalc"
         minSdk = 24

@@ -88,6 +88,8 @@ android {
     namespace = "com.example.weatherapplication"
     compileSdk = 35
 
+    sourceSets["main"].manifest.srcFile("src/main/AndroidManifest.xml")
+
     defaultConfig {
         applicationId = "com.example.weatherapplication"
         minSdk = 24

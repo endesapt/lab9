@@ -84,6 +84,10 @@ jobs:
           cache: true
       - name: Enable Flutter Android
         run: flutter config --enable-android
+      - name: Prepare Android local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
       - name: Install dependencies
         run: flutter pub get
       - name: Build Android APK
