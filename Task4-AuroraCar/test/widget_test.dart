@@ -38,10 +38,17 @@ class MemoryBookingRepository implements BookingRepository {
   Future<void> deleteBooking(int id) async {
     _items.removeWhere((booking) => booking.id == id);
   }
+
+  @override
+  Future<void> clearBookingsCache() async {
+    _items.clear();
+  }
 }
 
 class FakeSettingsService extends SettingsService {
   Locale? storedLocale;
+  ThemeMode storedThemeMode = ThemeMode.system;
+  String? storedSessionEmail = 'demo@aurora.app';
 
   @override
   Future<Locale?> loadLocale() async => storedLocale;
@@ -50,9 +57,60 @@ class FakeSettingsService extends SettingsService {
   Future<void> saveLocale(Locale locale) async {
     storedLocale = locale;
   }
+
+  @override
+  Future<ThemeMode> loadThemeMode() async => storedThemeMode;
+
+  @override
+  Future<void> saveThemeMode(ThemeMode mode) async {
+    storedThemeMode = mode;
+  }
+
+  @override
+  Future<String?> loadSessionEmail() async => storedSessionEmail;
+
+  @override
+  Future<void> saveSessionEmail(String email) async {
+    storedSessionEmail = email;
+  }
+
+  @override
+  Future<void> clearSession() async {
+    storedSessionEmail = null;
+  }
 }
 
 void main() {
+  testWidgets('shows login screen and signs in with valid credentials', (
+    tester,
+  ) async {
+    final settingsService = FakeSettingsService()..storedSessionEmail = null;
+
+    await tester.pumpWidget(
+      CarRentalApp(
+        settingsService: settingsService,
+        bookingRepository: MemoryBookingRepository(),
+        carRepository: DemoCarRepository(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Welcome back'), findsOneWidget);
+
+    await tester.enterText(
+      find.byKey(const ValueKey('login-email')),
+      'student@example.com',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('login-password')),
+      '12345',
+    );
+    await tester.tap(find.byKey(const ValueKey('login-submit')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Cars'), findsOneWidget);
+  });
+
   testWidgets('shows cars and switches locale to Russian', (tester) async {
     final settingsService = FakeSettingsService();
 
@@ -68,7 +126,7 @@ void main() {
     expect(find.text('Aurora Drive'), findsOneWidget);
     expect(find.text('Cars'), findsOneWidget);
 
-    await tester.tap(find.byIcon(Icons.language));
+    await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Русский'));
     await tester.pumpAndSettle();

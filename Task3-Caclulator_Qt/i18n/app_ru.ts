@@ -42,9 +42,14 @@
         <source>New round started.</source>
         <translation>Новый раунд начался.</translation>
     </message>
+    <message>
+        <source>Application started.</source>
+        <translation>Приложение запущено.</translation>
+    </message>
 </context>
 <context>
     <name>Main</name>
+    <message><source>Game</source><translation>Игра</translation></message>
     <message><source>Guess Number</source><translation>Угадай число</translation></message>
     <message><source>Attempt result</source><translation>Результат попытки</translation></message>
     <message><source>Guess a number from 1 to 100</source><translation>Угадайте число от 1 до 100</translation></message>
@@ -66,5 +71,10 @@
     <message><source>Name</source><translation>Имя</translation></message>
     <message><source>Email</source><translation>Email</translation></message>
     <message><source>Save account</source><translation>Сохранить аккаунт</translation></message>
+    <message><source>Clear history</source><translation>Очистить историю</translation></message>
+    <message><source>Wide layout is enabled for desktop and tablet screens.</source><translation>Широкая компоновка включена для настольных и планшетных экранов.</translation></message>
+    <message><source>Compact layout is enabled for phones and narrow windows.</source><translation>Компактная компоновка включена для телефонов и узких окон.</translation></message>
+    <message><source>Recent history</source><translation>Недавняя история</translation></message>
+    <message><source>History is empty.</source><translation>История пуста.</translation></message>
 </context>
 </TS>

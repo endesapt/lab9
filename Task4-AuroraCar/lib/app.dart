@@ -9,7 +9,10 @@ import 'data/repositories/car_repository.dart';
 import 'data/services/settings_service.dart';
 import 'presentation/providers/locale_provider.dart';
 import 'presentation/providers/rental_provider.dart';
+import 'presentation/providers/session_provider.dart';
+import 'presentation/providers/theme_provider.dart';
 import 'presentation/screens/home_screen.dart';
+import 'presentation/screens/login_screen.dart';
 
 class CarRentalApp extends StatelessWidget {
   const CarRentalApp({
@@ -31,18 +34,26 @@ class CarRentalApp extends StatelessWidget {
           create: (_) => LocaleProvider(settingsService)..loadLocale(),
         ),
         ChangeNotifierProvider(
+          create: (_) => ThemeProvider(settingsService)..loadThemeMode(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SessionProvider(settingsService)..loadSession(),
+        ),
+        ChangeNotifierProvider(
           create: (_) => RentalProvider(
             bookingRepository: bookingRepository,
             carRepository: carRepository,
           )..initialize(),
         ),
       ],
-      child: Consumer<LocaleProvider>(
-        builder: (context, localeProvider, _) {
+      child: Consumer3<LocaleProvider, ThemeProvider, SessionProvider>(
+        builder: (context, localeProvider, themeProvider, sessionProvider, _) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Aurora Drive',
-            theme: buildAppTheme(),
+            theme: buildAppTheme(brightness: Brightness.light),
+            darkTheme: buildAppTheme(brightness: Brightness.dark),
+            themeMode: themeProvider.themeMode,
             locale: localeProvider.locale,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: const [
@@ -51,7 +62,13 @@ class CarRentalApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: const HomeScreen(),
+            home: sessionProvider.isLoading
+                ? const Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  )
+                : sessionProvider.isAuthenticated
+                ? const HomeScreen()
+                : const LoginScreen(),
           );
         },
       ),

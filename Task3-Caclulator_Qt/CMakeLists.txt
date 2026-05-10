@@ -1,17 +1,17 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(task4 VERSION 0.1 LANGUAGES CXX)
+project(task3 VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 
-find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 LinguistTools Test)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 LinguistTools Test Sql)
 
 qt_standard_project_setup(REQUIRES 6.10)
 
-qt_add_executable(apptask4
+qt_add_executable(apptask3
     main.cpp
     src/GameEngine.cpp
     src/GameEngine.h
@@ -21,13 +21,13 @@ qt_add_executable(apptask4
     src/GameViewModel.h
 )
 
-qt_add_qml_module(apptask4
-    URI task4
+qt_add_qml_module(apptask3
+    URI task3
     QML_FILES
         Main.qml
 )
 
-qt_add_translations(TARGETS apptask4
+qt_add_translations(TARGETS apptask3
     TS_FILES
         i18n/app_en.ts
         i18n/app_ru.ts
@@ -38,24 +38,27 @@ qt_add_translations(TARGETS apptask4
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
-set_target_properties(apptask4 PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.apptask4
+set_target_properties(apptask3 PROPERTIES
+#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.apptask3
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
 )
 
-target_link_libraries(apptask4
+target_link_libraries(apptask3
     PRIVATE
         Qt6::Quick
         Qt6::QuickControls2
+        Qt6::Sql
 )
 
 qt_add_executable(guessgame_tests
     tests/test_guessgame.cpp
     src/GameEngine.cpp
+    src/GameViewModel.cpp
     src/SettingsRepository.cpp
     src/GameEngine.h
+    src/GameViewModel.h
     src/SettingsRepository.h
 )
 
@@ -63,6 +66,7 @@ target_link_libraries(guessgame_tests
     PRIVATE
         Qt6::Core
         Qt6::Test
+        Qt6::Sql
 )
 
 add_test(NAME guessgame_tests COMMAND $<TARGET_FILE:guessgame_tests>)
@@ -77,7 +81,7 @@ if(NOT ANDROID)
     )
 endif()
 
-install(TARGETS apptask4
+install(TARGETS apptask3
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

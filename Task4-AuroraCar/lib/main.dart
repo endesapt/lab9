@@ -11,7 +11,7 @@ Future<void> main() async {
 
   final settingsService = SettingsService();
   final databaseService = DatabaseService();
-  final bookingRepository = SqfliteBookingRepository(databaseService);
+  final bookingRepository = LocalBookingRepository(databaseService);
   final carRepository = DemoCarRepository();
 
   runApp(

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <QString>
+#include <QStringList>
 
 #include <memory>
 
-#include <QSettings>
+class SettingsStorageBackend;
 
 struct PersistentState {
     int launchCount = 0;
@@ -17,16 +18,18 @@ struct PersistentState {
     QString accountName = QStringLiteral("Guest");
     QString accountEmail = QStringLiteral("guest@example.com");
     QString languageCode = QStringLiteral("en");
+    QStringList historyEntries;
 };
 
 class SettingsRepository
 {
 public:
     explicit SettingsRepository(const QString &iniFilePath = QString());
+    ~SettingsRepository();
 
     PersistentState initializeState();
     void saveState(const PersistentState &state);
 
 private:
-    std::unique_ptr<QSettings> settings_;
+    std::unique_ptr<SettingsStorageBackend> backend_;
 };

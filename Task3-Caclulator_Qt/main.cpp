@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
             []() { QCoreApplication::exit(-1); },
             Qt::QueuedConnection);
 
-        engine.loadFromModule("task4", "Main");
+        engine.loadFromModule("task3", "Main");
         return QCoreApplication::exec();
     } catch (const std::exception &ex) {
         qCritical() << "Fatal startup error:" << ex.what();

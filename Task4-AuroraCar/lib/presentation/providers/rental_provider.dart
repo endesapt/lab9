@@ -9,8 +9,8 @@ class RentalProvider extends ChangeNotifier {
   RentalProvider({
     required BookingRepository bookingRepository,
     required CarRepository carRepository,
-  })  : _bookingRepository = bookingRepository,
-        _carRepository = carRepository;
+  }) : _bookingRepository = bookingRepository,
+       _carRepository = carRepository;
 
   final BookingRepository _bookingRepository;
   final CarRepository _carRepository;
@@ -101,6 +101,17 @@ class RentalProvider extends ChangeNotifier {
       debugPrint('Failed to cancel booking: $error');
       debugPrintStack(stackTrace: stackTrace);
       return false;
+    }
+  }
+
+  Future<void> clearBookingsCache() async {
+    try {
+      await _bookingRepository.clearBookingsCache();
+      _bookings = const [];
+      notifyListeners();
+    } catch (error, stackTrace) {
+      debugPrint('Failed to clear cache: $error');
+      debugPrintStack(stackTrace: stackTrace);
     }
   }
 }

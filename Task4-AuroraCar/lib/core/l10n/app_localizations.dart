@@ -5,11 +5,7 @@ class AppLocalizations {
 
   final Locale locale;
 
-  static const supportedLocales = [
-    Locale('en'),
-    Locale('ru'),
-    Locale('be'),
-  ];
+  static const supportedLocales = [Locale('en'), Locale('ru'), Locale('be')];
 
   static const delegate = _AppLocalizationsDelegate();
 
@@ -51,6 +47,26 @@ class AppLocalizations {
       'statusPaid': 'Paid (demo)',
       'loading': 'Loading...',
       'currency': 'BYN',
+      'settingsTitle': 'Settings',
+      'themeTitle': 'Theme',
+      'themeSystem': 'System',
+      'themeLight': 'Light',
+      'themeDark': 'Dark',
+      'cacheTitle': 'Offline cache',
+      'cacheHint': 'Saved bookings stay available without network access.',
+      'clearCache': 'Clear cache',
+      'cacheCleared': 'Cache cleared',
+      'accountTitle': 'Account',
+      'versionLabel': 'Version',
+      'signOut': 'Sign out',
+      'signInTitle': 'Welcome back',
+      'signInSubtitle':
+          'Use demo email/password to restore your saved session.',
+      'signInButton': 'Sign in',
+      'emailLabel': 'Email',
+      'passwordLabel': 'Password',
+      'loginError':
+          'Enter a valid email and a password with at least 4 characters.',
     },
     'ru': {
       'appTitle': 'Aurora Drive',
@@ -89,6 +105,25 @@ class AppLocalizations {
       'statusPaid': 'Оплачено (демо)',
       'loading': 'Загрузка...',
       'currency': 'BYN',
+      'settingsTitle': 'Настройки',
+      'themeTitle': 'Тема',
+      'themeSystem': 'Системная',
+      'themeLight': 'Светлая',
+      'themeDark': 'Тёмная',
+      'cacheTitle': 'Офлайн-кеш',
+      'cacheHint': 'Сохранённые бронирования доступны даже без сети.',
+      'clearCache': 'Очистить кеш',
+      'cacheCleared': 'Кеш очищен',
+      'accountTitle': 'Аккаунт',
+      'versionLabel': 'Версия',
+      'signOut': 'Выйти',
+      'signInTitle': 'С возвращением',
+      'signInSubtitle':
+          'Используйте demo email/password, чтобы восстановить сохранённую сессию.',
+      'signInButton': 'Войти',
+      'emailLabel': 'Email',
+      'passwordLabel': 'Пароль',
+      'loginError': 'Введите корректный email и пароль не короче 4 символов.',
     },
     'be': {
       'appTitle': 'Aurora Drive',
@@ -127,6 +162,26 @@ class AppLocalizations {
       'statusPaid': 'Аплочана (дэма)',
       'loading': 'Загрузка...',
       'currency': 'BYN',
+      'settingsTitle': 'Налады',
+      'themeTitle': 'Тэма',
+      'themeSystem': 'Сістэмная',
+      'themeLight': 'Светлая',
+      'themeDark': 'Цёмная',
+      'cacheTitle': 'Афлайн-кэш',
+      'cacheHint': 'Захаваныя браніраванні даступныя нават без сеткі.',
+      'clearCache': 'Ачысціць кэш',
+      'cacheCleared': 'Кэш ачышчаны',
+      'accountTitle': 'Акаўнт',
+      'versionLabel': 'Версія',
+      'signOut': 'Выйсці',
+      'signInTitle': 'З вяртаннем',
+      'signInSubtitle':
+          'Выкарыстоўвайце demo email/password, каб аднавіць захаваную сесію.',
+      'signInButton': 'Увайсці',
+      'emailLabel': 'Email',
+      'passwordLabel': 'Пароль',
+      'loginError':
+          'Увядзіце карэктны email і пароль не карацейшы за 4 сімвалы.',
     },
   };
 

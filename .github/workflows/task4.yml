@@ -1,0 +1,97 @@
+name: Task4 Flutter CI
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/task4.yml"
+      - "Task4-AuroraCar/**"
+  pull_request:
+    paths:
+      - ".github/workflows/task4.yml"
+      - "Task4-AuroraCar/**"
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Task4-AuroraCar
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install Linux toolchain
+        run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Run unit, widget and integration tests
+        run: flutter test && flutter test integration_test
+      - name: Build Web
+        run: flutter build web --release
+
+  linux:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Task4-AuroraCar
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install Linux toolchain
+        run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build Linux
+        run: flutter build linux --release
+
+  android:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Task4-AuroraCar
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build Android APK
+        run: flutter build apk --debug
+
+  ios:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: Task4-AuroraCar
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build iOS simulator app
+        run: flutter build ios --simulator --debug --no-codesign

@@ -25,10 +25,7 @@ class CarMap extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(28),
       child: FlutterMap(
-        options: MapOptions(
-          initialCenter: center,
-          initialZoom: 12.8,
-        ),
+        options: MapOptions(initialCenter: center, initialZoom: 12.8),
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -36,37 +33,34 @@ class CarMap extends StatelessWidget {
           ),
           MarkerLayer(
             markers: cars.map((car) {
-                final isSelected = selectedCar?.id == car.id;
-                return Marker(
-                  point: LatLng(car.latitude, car.longitude),
-                  width: 72,
-                  height: 72,
-                  child: GestureDetector(
-                    key: ValueKey('marker-${car.id}'),
-                    onTap: () => onCarTap(car),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context).colorScheme.primary,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.18),
-                            blurRadius: 10,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.electric_car,
-                        color: Colors.white,
-                      ),
+              final isSelected = selectedCar?.id == car.id;
+              return Marker(
+                point: LatLng(car.latitude, car.longitude),
+                width: 72,
+                height: 72,
+                child: GestureDetector(
+                  key: ValueKey('marker-${car.id}'),
+                  onTap: () => onCarTap(car),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.secondary
+                          : Theme.of(context).colorScheme.primary,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.18),
+                          blurRadius: 10,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
                     ),
+                    child: const Icon(Icons.electric_car, color: Colors.white),
                   ),
-                );
-              }).toList(),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),

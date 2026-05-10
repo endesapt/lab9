@@ -1,5 +1,3 @@
-import 'package:sqflite/sqflite.dart';
-
 import '../models/booking.dart';
 import '../services/database_service.dart';
 
@@ -7,33 +5,34 @@ abstract class BookingRepository {
   Future<List<Booking>> loadBookings();
   Future<Booking> saveBooking(Booking booking);
   Future<void> deleteBooking(int id);
+  Future<void> clearBookingsCache();
 }
 
-class SqfliteBookingRepository implements BookingRepository {
-  SqfliteBookingRepository(this._databaseService);
+class LocalBookingRepository implements BookingRepository {
+  LocalBookingRepository(this._databaseService);
 
   final DatabaseService _databaseService;
 
   @override
   Future<List<Booking>> loadBookings() async {
-    final db = await _databaseService.database;
-    final rows = await db.query(
-      'bookings',
-      orderBy: 'bookedAt DESC',
-    );
-    return rows.map(Booking.fromMap).toList();
+    final rows = await _databaseService.loadBookingMaps();
+    return rows.map(Booking.fromMap).toList()
+      ..sort((left, right) => right.bookedAt.compareTo(left.bookedAt));
   }
 
   @override
   Future<Booking> saveBooking(Booking booking) async {
-    final db = await _databaseService.database;
-    final id = await db.insert(
-      'bookings',
-      booking.toMap()..remove('id'),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    return Booking(
-      id: id,
+    final rows = await _databaseService.loadBookingMaps();
+    final nextId =
+        rows
+            .map((item) => (item['id'] as num?)?.toInt() ?? 0)
+            .fold<int>(
+              0,
+              (current, value) => value > current ? value : current,
+            ) +
+        1;
+    final savedBooking = Booking(
+      id: nextId,
       carId: booking.carId,
       carName: booking.carName,
       durationType: booking.durationType,
@@ -42,15 +41,20 @@ class SqfliteBookingRepository implements BookingRepository {
       bookedAt: booking.bookedAt,
       status: booking.status,
     );
+    rows.insert(0, savedBooking.toMap());
+    await _databaseService.saveBookingMaps(rows);
+    return savedBooking;
   }
 
   @override
   Future<void> deleteBooking(int id) async {
-    final db = await _databaseService.database;
-    await db.delete(
-      'bookings',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    final rows = await _databaseService.loadBookingMaps();
+    rows.removeWhere((item) => item['id'] == id);
+    await _databaseService.saveBookingMaps(rows);
+  }
+
+  @override
+  Future<void> clearBookingsCache() async {
+    await _databaseService.clearBookings();
   }
 }

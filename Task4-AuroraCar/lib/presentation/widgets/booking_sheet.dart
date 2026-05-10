@@ -41,11 +41,17 @@ class _BookingSheetState extends State<BookingSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.car.name, style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              widget.car.name,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 4),
             Text(widget.car.description),
             const SizedBox(height: 16),
-            Text(loc.text('duration'), style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              loc.text('duration'),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
             SegmentedButton<String>(
               segments: [
@@ -83,7 +89,9 @@ class _BookingSheetState extends State<BookingSheet> {
                   children: [
                     Text(loc.text('rentalSummary')),
                     const SizedBox(height: 8),
-                    Text('${loc.text('price')}: $total ${loc.text('currency')}'),
+                    Text(
+                      '${loc.text('price')}: $total ${loc.text('currency')}',
+                    ),
                     const SizedBox(height: 4),
                     Text(loc.text('fakePaymentHint')),
                   ],
@@ -95,7 +103,9 @@ class _BookingSheetState extends State<BookingSheet> {
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: _submitting ? null : () => Navigator.of(context).pop(),
+                    onPressed: _submitting
+                        ? null
+                        : () => Navigator.of(context).pop(),
                     child: Text(loc.text('cancel')),
                   ),
                 ),
@@ -105,9 +115,15 @@ class _BookingSheetState extends State<BookingSheet> {
                     key: const ValueKey('confirm-booking'),
                     onPressed: _submitting
                         ? null
-                        : () => _submit(context, _durationType, _duration.round()),
+                        : () => _submit(
+                            context,
+                            _durationType,
+                            _duration.round(),
+                          ),
                     child: Text(
-                      _submitting ? loc.text('loading') : loc.text('payAndBook'),
+                      _submitting
+                          ? loc.text('loading')
+                          : loc.text('payAndBook'),
                     ),
                   ),
                 ),
@@ -130,9 +146,9 @@ class _BookingSheetState extends State<BookingSheet> {
     final provider = context.read<RentalProvider>();
     final navigator = Navigator.of(context);
     final saved = await provider.createBooking(
-          durationType: durationType,
-          duration: duration,
-        );
+      durationType: durationType,
+      duration: duration,
+    );
 
     if (!mounted) {
       return;
@@ -142,13 +158,9 @@ class _BookingSheetState extends State<BookingSheet> {
 
     if (saved) {
       navigator.pop();
-      messenger.showSnackBar(
-        SnackBar(content: Text(loc.text('bookingSaved'))),
-      );
+      messenger.showSnackBar(SnackBar(content: Text(loc.text('bookingSaved'))));
     } else {
-      messenger.showSnackBar(
-        SnackBar(content: Text(loc.text('errorTitle'))),
-      );
+      messenger.showSnackBar(SnackBar(content: Text(loc.text('errorTitle'))));
     }
   }
 }

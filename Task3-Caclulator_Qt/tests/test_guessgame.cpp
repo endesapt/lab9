@@ -1,6 +1,7 @@
 #include <QtTest>
 
 #include "../src/GameEngine.h"
+#include "../src/GameViewModel.h"
 #include "../src/SettingsRepository.h"
 
 #include <QTemporaryDir>
@@ -13,6 +14,8 @@ private slots:
     void gameEngine_winAwardsPoints();
     void gameEngine_invalidGuessThrows();
     void settingsRepository_generatesIdAndPersistsState();
+    void settingsRepository_persistsHistoryEntries();
+    void gameViewModel_tracksRoundHistory();
 };
 
 void GuessGameTests::gameEngine_winAwardsPoints()
@@ -42,7 +45,7 @@ void GuessGameTests::settingsRepository_generatesIdAndPersistsState()
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
 
-    const QString iniPath = dir.filePath("settings.ini");
+    const QString iniPath = dir.filePath("settings.sqlite");
 
     SettingsRepository repository(iniPath);
     PersistentState state = repository.initializeState();
@@ -68,6 +71,46 @@ void GuessGameTests::settingsRepository_generatesIdAndPersistsState()
     QCOMPARE(reloaded.accountName, QStringLiteral("Tester"));
     QCOMPARE(reloaded.accountEmail, QStringLiteral("tester@example.com"));
     QCOMPARE(reloaded.languageCode, QStringLiteral("ru"));
+}
+
+void GuessGameTests::settingsRepository_persistsHistoryEntries()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+
+    const QString databasePath = dir.filePath("history.sqlite");
+
+    SettingsRepository repository(databasePath);
+    PersistentState state = repository.initializeState();
+    state.accountName = QStringLiteral("Tester");
+    state.historyEntries = {
+        QStringLiteral("Round started"),
+        QStringLiteral("Too low"),
+        QStringLiteral("You guessed it")
+    };
+    repository.saveState(state);
+
+    SettingsRepository repositoryReloaded(databasePath);
+    const PersistentState reloaded = repositoryReloaded.initializeState();
+
+    QCOMPARE(reloaded.historyEntries.size(), 3);
+    QCOMPARE(reloaded.historyEntries.first(), QStringLiteral("Round started"));
+    QCOMPARE(reloaded.historyEntries.last(), QStringLiteral("You guessed it"));
+}
+
+void GuessGameTests::gameViewModel_tracksRoundHistory()
+{
+    GameViewModel viewModel;
+    const int historyBefore = viewModel.historyEntries().size();
+
+    viewModel.startNewGame();
+    viewModel.submitGuess(QStringLiteral("50"));
+
+    QVERIFY(viewModel.historyEntries().size() >= historyBefore + 1);
+    QVERIFY(!viewModel.lastResult().isEmpty());
+
+    viewModel.clearHistory();
+    QVERIFY(viewModel.historyEntries().isEmpty());
 }
 
 QTEST_MAIN(GuessGameTests)

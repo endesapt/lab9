@@ -1,36 +1,28 @@
-import 'package:path/path.dart' as p;
-import 'package:sqflite/sqflite.dart';
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DatabaseService {
-  Database? _database;
+  static const _bookingsKey = 'bookings_cache';
 
-  Future<Database> get database async {
-    if (_database != null) {
-      return _database!;
-    }
+  Future<List<Map<String, Object?>>> loadBookingMaps() async {
+    final preferences = await SharedPreferences.getInstance();
+    final rawList = preferences.getStringList(_bookingsKey) ?? const [];
 
-    final dbPath = await getDatabasesPath();
-    final path = p.join(dbPath, 'aurora_drive.db');
+    return rawList
+        .map((item) => jsonDecode(item) as Map<String, dynamic>)
+        .map((item) => item.map((key, value) => MapEntry(key, value)))
+        .toList();
+  }
 
-    _database = await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE bookings(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            carId TEXT NOT NULL,
-            carName TEXT NOT NULL,
-            durationType TEXT NOT NULL,
-            duration INTEGER NOT NULL,
-            totalPrice INTEGER NOT NULL,
-            bookedAt TEXT NOT NULL,
-            status TEXT NOT NULL
-          )
-        ''');
-      },
-    );
+  Future<void> saveBookingMaps(List<Map<String, Object?>> items) async {
+    final preferences = await SharedPreferences.getInstance();
+    final encoded = items.map(jsonEncode).toList();
+    await preferences.setStringList(_bookingsKey, encoded);
+  }
 
-    return _database!;
+  Future<void> clearBookings() async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.remove(_bookingsKey);
   }
 }

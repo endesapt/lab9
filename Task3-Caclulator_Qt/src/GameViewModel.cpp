@@ -20,6 +20,7 @@ GameViewModel::GameViewModel(QObject *parent)
     }
 
     setLastResult(tr("Game is ready. Enter a number from 1 to 100."));
+    prependHistoryEntry(tr("Application started."));
 }
 
 int GameViewModel::launchCount() const
@@ -89,11 +90,17 @@ QString GameViewModel::lastResult() const
     return lastResult_;
 }
 
+QStringList GameViewModel::historyEntries() const
+{
+    return state_.historyEntries;
+}
+
 void GameViewModel::submitGuess(const QString &guessText)
 {
     if (roundFinished_) {
         const QString message = tr("Round is finished. Start a new game.");
         setLastResult(message);
+        prependHistoryEntry(message);
         emit attemptDialogRequested(tr("Attempt result"), message);
         return;
     }
@@ -105,6 +112,7 @@ void GameViewModel::submitGuess(const QString &guessText)
         const QString message = tr("Input error: please enter an integer number.");
         qCritical() << message;
         setLastResult(message);
+        prependHistoryEntry(message);
         emit attemptDialogRequested(tr("Attempt result"), message);
         return;
     }
@@ -130,12 +138,14 @@ void GameViewModel::submitGuess(const QString &guessText)
         }
 
         setLastResult(message);
+        prependHistoryEntry(message);
         emit gameChanged();
         emit attemptDialogRequested(tr("Attempt result"), message);
     } catch (const std::exception &ex) {
         qCritical() << "Guess submission failed:" << ex.what();
         const QString message = tr("Input range error: use numbers from 1 to 100.");
         setLastResult(message);
+        prependHistoryEntry(message);
         emit attemptDialogRequested(tr("Attempt result"), message);
     }
 }
@@ -145,6 +155,7 @@ void GameViewModel::startNewGame()
     engine_.startNewRound();
     roundFinished_ = false;
     setLastResult(tr("New round started."));
+    prependHistoryEntry(tr("New round started."));
     emit gameChanged();
 }
 
@@ -170,6 +181,27 @@ void GameViewModel::changeLanguage(const QString &code)
     saveStateSafe();
     emit settingsChanged();
     emit languageChangeRequested(code);
+}
+
+void GameViewModel::clearHistory()
+{
+    if (state_.historyEntries.isEmpty()) {
+        return;
+    }
+
+    state_.historyEntries.clear();
+    saveStateSafe();
+    emit historyChanged();
+}
+
+void GameViewModel::prependHistoryEntry(const QString &message)
+{
+    state_.historyEntries.prepend(message);
+    while (state_.historyEntries.size() > 12) {
+        state_.historyEntries.removeLast();
+    }
+    saveStateSafe();
+    emit historyChanged();
 }
 
 void GameViewModel::saveStateSafe()

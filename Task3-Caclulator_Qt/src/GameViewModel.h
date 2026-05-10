@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QStringList>
 
 class GameViewModel : public QObject
 {
@@ -22,6 +23,7 @@ class GameViewModel : public QObject
     Q_PROPERTY(QString languageCode READ languageCode NOTIFY settingsChanged)
 
     Q_PROPERTY(QString lastResult READ lastResult NOTIFY gameChanged)
+    Q_PROPERTY(QStringList historyEntries READ historyEntries NOTIFY historyChanged)
 
 public:
     explicit GameViewModel(QObject *parent = nullptr);
@@ -41,22 +43,26 @@ public:
     QString languageCode() const;
 
     QString lastResult() const;
+    QStringList historyEntries() const;
 
     Q_INVOKABLE void submitGuess(const QString &guessText);
     Q_INVOKABLE void startNewGame();
     Q_INVOKABLE void saveAccount(const QString &name, const QString &email);
     Q_INVOKABLE void changeLanguage(const QString &code);
+    Q_INVOKABLE void clearHistory();
 
 signals:
     void appInfoChanged();
     void settingsChanged();
     void accountChanged();
     void gameChanged();
+    void historyChanged();
 
     void attemptDialogRequested(const QString &title, const QString &message);
     void languageChangeRequested(const QString &languageCode);
 
 private:
+    void prependHistoryEntry(const QString &message);
     void saveStateSafe();
     void setLastResult(const QString &message);
 

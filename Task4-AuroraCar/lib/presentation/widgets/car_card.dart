@@ -67,9 +67,21 @@ class CarCard extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                Chip(label: Text('${loc.text('price')}: ${car.hourlyRate} ${loc.text('currency')} ${loc.text('perHour')}')),
-                Chip(label: Text('${car.dailyRate} ${loc.text('currency')} ${loc.text('perDay')}')),
-                Chip(label: Text('${loc.text('range')}: ${car.rangeKm} ${loc.text('km')}')),
+                Chip(
+                  label: Text(
+                    '${loc.text('price')}: ${car.hourlyRate} ${loc.text('currency')} ${loc.text('perHour')}',
+                  ),
+                ),
+                Chip(
+                  label: Text(
+                    '${car.dailyRate} ${loc.text('currency')} ${loc.text('perDay')}',
+                  ),
+                ),
+                Chip(
+                  label: Text(
+                    '${loc.text('range')}: ${car.rangeKm} ${loc.text('km')}',
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 12),

@@ -50,24 +50,27 @@ void main() {
 
   test('creates booking and prepends it to history', () async {
     when(() => bookingRepository.loadBookings()).thenAnswer((_) async => []);
-    when(() => bookingRepository.saveBooking(any())).thenAnswer(
-      (invocation) async {
-        final booking = invocation.positionalArguments.first as Booking;
-        return Booking(
-          id: 7,
-          carId: booking.carId,
-          carName: booking.carName,
-          durationType: booking.durationType,
-          duration: booking.duration,
-          totalPrice: booking.totalPrice,
-          bookedAt: booking.bookedAt,
-          status: booking.status,
-        );
-      },
-    );
+    when(() => bookingRepository.saveBooking(any())).thenAnswer((
+      invocation,
+    ) async {
+      final booking = invocation.positionalArguments.first as Booking;
+      return Booking(
+        id: 7,
+        carId: booking.carId,
+        carName: booking.carName,
+        durationType: booking.durationType,
+        duration: booking.duration,
+        totalPrice: booking.totalPrice,
+        bookedAt: booking.bookedAt,
+        status: booking.status,
+      );
+    });
 
     await provider.initialize();
-    final result = await provider.createBooking(durationType: 'day', duration: 2);
+    final result = await provider.createBooking(
+      durationType: 'day',
+      duration: 2,
+    );
 
     expect(result, isTrue);
     expect(provider.bookings, hasLength(1));
@@ -98,5 +101,29 @@ void main() {
     expect(result, isTrue);
     expect(provider.bookings, isEmpty);
     verify(() => bookingRepository.deleteBooking(5)).called(1);
+  });
+
+  test('clears cached bookings', () async {
+    when(() => bookingRepository.loadBookings()).thenAnswer(
+      (_) async => [
+        Booking(
+          id: 2,
+          carId: 'ev-2',
+          carName: 'Nemiga Wagon',
+          durationType: 'day',
+          duration: 1,
+          totalPrice: 245,
+          bookedAt: DateTime(2026, 4, 27, 9),
+          status: 'paid_demo',
+        ),
+      ],
+    );
+    when(() => bookingRepository.clearBookingsCache()).thenAnswer((_) async {});
+
+    await provider.initialize();
+    await provider.clearBookingsCache();
+
+    expect(provider.bookings, isEmpty);
+    verify(() => bookingRepository.clearBookingsCache()).called(1);
   });
 }
