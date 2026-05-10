@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Weather Forecast</string>
+    <string name="loading_weather">Loading weather data...</string>
+    <string name="tap_city_for_details">Tap a city to see detailed weather and a 7-day forecast.</string>
+    <string name="add_city_hint">Add your city</string>
+    <string name="add_city">Add city</string>
+    <string name="refresh">Refresh</string>
+    <string name="enter_city">Enter a city name first.</string>
+    <string name="searching_city">Searching city...</string>
+    <string name="city_not_found">City not found.</string>
+    <string name="city_already_added">This city is already in the list.</string>
+    <string name="city_added">%1$s added.</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="loading_details">Loading detailed forecast...</string>
+    <string name="forecast_title">7-day forecast</string>
+    <string name="network_error">Network error: %1$s</string>
+</resources>

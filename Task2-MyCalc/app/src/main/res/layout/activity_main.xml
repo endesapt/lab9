@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/composeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/gestureStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:text="@string/gesture_draw_pad"
+        android:textStyle="bold" />
+
+    <android.gesture.GestureOverlayView
+        android:id="@+id/gestureOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#15000000"
+        android:gestureColor="#FF2E7D32"
+        android:gestureStrokeWidth="6"
+        android:padding="8dp"
+        android:uncertainGestureColor="#FF81C784">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/gesture_draw_pad"
+            android:textAlignment="center" />
+    </android.gesture.GestureOverlayView>
+
+</LinearLayout>

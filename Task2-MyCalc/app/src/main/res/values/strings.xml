@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Calc &amp; Converter</string>
+    <string name="error_div_zero">Invalid operation (division by zero)</string>
+    <string name="gesture_draw_pad">Draw calculator gestures here</string>
+    <string name="gesture_ready">Gesture library loaded. Use digits and operators.</string>
+    <string name="gesture_failed">Gesture library failed to load.</string>
+    <string name="gesture_unknown">Unknown gesture.</string>
+    <string name="gesture_recognized">Recognized gesture: %1$s</string>
+</resources>

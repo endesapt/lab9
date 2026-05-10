@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Калькулятор-Конвертер</string>
+    <string name="error_div_zero">Недопустима операція (ділення на нуль)</string>
+</resources>
