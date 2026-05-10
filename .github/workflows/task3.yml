@@ -1,0 +1,99 @@
+name: Task3 Qt CI
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/task3.yml"
+      - "Task3-Caclulator_Qt/**"
+  pull_request:
+    paths:
+      - ".github/workflows/task3.yml"
+      - "Task3-Caclulator_Qt/**"
+
+permissions:
+  contents: read
+
+jobs:
+  linux-desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt Desktop
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.10.0"
+          target: desktop
+          cache: true
+      - name: Configure Desktop build
+        run: qt-cmake -S Task3-Caclulator_Qt -B build/task3-linux -G Ninja
+      - name: Build Desktop
+        run: cmake --build build/task3-linux --parallel
+      - name: Run unit tests
+        run: ctest --test-dir build/task3-linux --output-on-failure
+
+  wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt for WebAssembly
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.10.0"
+          host: all_os
+          target: wasm
+          cache: true
+      - name: Configure WebAssembly build
+        run: qt-cmake -S Task3-Caclulator_Qt -B build/task3-wasm -G Ninja
+      - name: Build WebAssembly
+        run: cmake --build build/task3-wasm --parallel
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Android packages
+        run: |
+          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0" "ndk;27.2.12479018"
+          echo "ANDROID_NDK_ROOT=${ANDROID_SDK_ROOT}/ndk/27.2.12479018" >> "$GITHUB_ENV"
+      - name: Install Qt for Android
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.10.0"
+          host: linux
+          target: android
+          arch: android_arm64_v8a
+          cache: true
+      - name: Configure Android build
+        run: |
+          qt-cmake \
+            -S Task3-Caclulator_Qt \
+            -B build/task3-android \
+            -G Ninja \
+            -DANDROID_SDK_ROOT="${ANDROID_SDK_ROOT}" \
+            -DANDROID_NDK_ROOT="${ANDROID_NDK_ROOT}"
+      - name: Build Android APK
+        run: cmake --build build/task3-android --target apk --parallel
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt for iOS
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.10.0"
+          host: mac
+          target: ios
+          cache: true
+      - name: Configure iOS simulator build
+        run: qt-cmake -S Task3-Caclulator_Qt -B build/task3-ios -G Xcode -DCMAKE_OSX_SYSROOT=iphonesimulator
+      - name: Build iOS simulator app
+        run: cmake --build build/task3-ios --config Release --parallel
