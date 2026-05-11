@@ -11,7 +11,7 @@ import kotlin.test.assertTrue
 class PresenterIntegrationTest {
     @Test
     fun calculateAddsHistory() {
-        val presenter = CalculatorPresenter(HistoryRepository(TestCacheStore()), ::fakeStrings)
+        val presenter = CalculatorPresenter(HistoryRepository(PresenterTestCacheStore()), ::fakeStrings)
         presenter.onPrincipalChange("1000")
         presenter.onRateChange("5")
         presenter.onYearsChange(2)
@@ -46,7 +46,7 @@ private fun fakeStrings(): AppStrings = AppStrings(
     zoomHint = ""
 )
 
-private class TestCacheStore : com.example.mycalc.cache.CacheStore {
+private class PresenterTestCacheStore : com.example.mycalc.cache.CacheStore {
     private val data = mutableMapOf<String, String>()
 
     override fun read(key: String): String? = data[key]

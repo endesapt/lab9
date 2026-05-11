@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val deps = AppDependencies(
-            cacheStore = createCacheStore(this),
+            cacheStore = createCacheStore(PlatformContext(this)),
             platform = PlatformKind.Android
         )
 

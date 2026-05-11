@@ -8,7 +8,7 @@ import com.example.mycalc.model.HistoryEntry
 import com.example.mycalc.model.InputParams
 import com.example.mycalc.model.ValidationResult
 import com.example.mycalc.model.calculateGrowth
-import kotlin.system.getTimeMillis
+import com.example.mycalc.currentTimeMillis
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -78,7 +78,7 @@ class CalculatorPresenter(
         try {
             val result = calculateGrowth(params)
             val entry = HistoryEntry(
-                timestampMillis = getTimeMillis(),
+                timestampMillis = currentTimeMillis(),
                 params = params,
                 result = result
             )

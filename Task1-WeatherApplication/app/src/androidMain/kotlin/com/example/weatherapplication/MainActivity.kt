@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
 
         val deps = AppDependencies(
             httpClient = createHttpClient(),
-            cacheStore = createCacheStore(this),
+            cacheStore = createCacheStore(PlatformContext(this)),
             platform = PlatformKind.Android
         )
 

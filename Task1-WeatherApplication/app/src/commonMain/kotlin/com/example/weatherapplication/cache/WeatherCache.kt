@@ -3,7 +3,7 @@ package com.example.weatherapplication.cache
 import com.example.weatherapplication.data.City
 import com.example.weatherapplication.data.CurrentWeather
 import com.example.weatherapplication.data.WeatherCondition
-import kotlin.system.getTimeMillis
+import com.example.weatherapplication.currentTimeMillis
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -34,7 +34,7 @@ class WeatherCache(private val store: CacheStore) {
     }
 
     fun saveCurrent(city: City, weather: CurrentWeather) {
-        val cached = CachedCurrentWeather.fromWeather(weather, getTimeMillis())
+        val cached = CachedCurrentWeather.fromWeather(weather, currentTimeMillis())
         store.write(weatherKey(city), json.encodeToString(cached))
     }
 
@@ -45,7 +45,7 @@ class WeatherCache(private val store: CacheStore) {
         }.getOrNull() ?: return null
 
         val weather = cached.toWeather()
-        val stale = getTimeMillis() - cached.updatedAtMillis > CACHE_TTL_MILLIS
+        val stale = currentTimeMillis() - cached.updatedAtMillis > CACHE_TTL_MILLIS
         return CacheResult(weather, stale)
     }
 

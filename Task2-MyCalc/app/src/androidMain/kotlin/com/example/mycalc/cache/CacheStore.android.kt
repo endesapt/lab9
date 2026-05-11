@@ -5,7 +5,7 @@ import com.example.mycalc.PlatformContext
 
 actual fun createCacheStore(context: PlatformContext?): CacheStore {
     val safeContext = context ?: error("Android context is required")
-    return AndroidCacheStore(safeContext)
+    return AndroidCacheStore(safeContext.androidContext)
 }
 
 private class AndroidCacheStore(context: Context) : CacheStore {
