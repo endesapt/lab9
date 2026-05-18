@@ -34,24 +34,6 @@ jobs:
       - name: Run unit tests
         run: ctest --test-dir build/task3-linux --output-on-failure
 
-  wasm:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Linux build tools
-        run: sudo apt-get update && sudo apt-get install -y ninja-build build-essential
-      - name: Install Qt for WebAssembly
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: "6.10.0"
-          host: all_os
-          target: wasm
-          arch: wasm_singlethread
-          cache: true
-      - name: Configure WebAssembly build
-        run: qt-cmake -S Task3-Caclulator_Qt -B build/task3-wasm -G Ninja -DBUILD_TESTING=OFF
-      - name: Build WebAssembly
-        run: cmake --build build/task3-wasm --parallel
 
   android:
     runs-on: ubuntu-latest
