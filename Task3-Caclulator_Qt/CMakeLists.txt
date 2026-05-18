@@ -5,6 +5,7 @@ project(task3 VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(CTest)
 enable_testing()
 
 find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 LinguistTools Test Sql)
@@ -43,6 +44,8 @@ set_target_properties(apptask3 PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
+    QT_ANDROID_VERSION_CODE 1
+    QT_ANDROID_VERSION_NAME ${PROJECT_VERSION}
 )
 
 target_link_libraries(apptask3
@@ -52,32 +55,35 @@ target_link_libraries(apptask3
         Qt6::Sql
 )
 
-qt_add_executable(guessgame_tests
-    tests/test_guessgame.cpp
-    src/GameEngine.cpp
-    src/GameViewModel.cpp
-    src/SettingsRepository.cpp
-    src/GameEngine.h
-    src/GameViewModel.h
-    src/SettingsRepository.h
-)
+if(BUILD_TESTING AND NOT ANDROID AND NOT IOS AND NOT CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    qt_add_executable(guessgame_tests
+        tests/test_guessgame.cpp
+        src/GameEngine.cpp
+        src/GameViewModel.cpp
+        src/SettingsRepository.cpp
+        src/GameEngine.h
+        src/GameViewModel.h
+        src/SettingsRepository.h
+    )
 
-target_link_libraries(guessgame_tests
-    PRIVATE
-        Qt6::Core
-        Qt6::Test
-        Qt6::Sql
-)
+    target_link_libraries(guessgame_tests
+        PRIVATE
+            Qt6::Core
+            Qt6::Test
+            Qt6::Sql
+    )
 
-add_test(NAME guessgame_tests COMMAND $<TARGET_FILE:guessgame_tests>)
+    add_test(NAME guessgame_tests COMMAND $<TARGET_FILE:guessgame_tests>)
 
-if(NOT ANDROID)
-    add_custom_target(run_unit_tests ALL
-        COMMAND ${CMAKE_COMMAND} -E env
-            "PATH=$<TARGET_FILE_DIR:Qt6::Core>;$<TARGET_FILE_DIR:guessgame_tests>;$ENV{PATH}"
-            $<TARGET_FILE:guessgame_tests>
-        DEPENDS guessgame_tests
-        COMMENT "Running unit tests"
+    if(WIN32)
+        set(TASK3_TEST_PATH_SEPARATOR ";")
+    else()
+        set(TASK3_TEST_PATH_SEPARATOR ":")
+    endif()
+
+    set_tests_properties(guessgame_tests PROPERTIES
+        ENVIRONMENT
+            "PATH=$<TARGET_FILE_DIR:Qt6::Core>${TASK3_TEST_PATH_SEPARATOR}$<TARGET_FILE_DIR:guessgame_tests>${TASK3_TEST_PATH_SEPARATOR}$ENV{PATH}"
     )
 endif()
 

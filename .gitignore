@@ -1,0 +1,4 @@
+.venv-qt/
+aqtinstall.log
+Qt/
+build/
