@@ -1,6 +1,5 @@
 package com.example.weatherapplication
 
-import kotlinx.browser.window
+import kotlin.js.Date
 
-actual fun currentTimeMillis(): Long =
-    window.performance.now().toLong()
+actual fun currentTimeMillis(): Long = Date.now().toLong()

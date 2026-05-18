@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-@OptIn(org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl::class)
 kotlin {
     androidTarget {
         compilations.all {
@@ -25,7 +24,7 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
-    wasmJs {
+    js(IR) {
         moduleName = "weatherApp"
         browser {
             commonWebpackConfig {
@@ -89,7 +88,8 @@ kotlin {
         val iosArm64Main by getting { dependsOn(iosMain) }
         val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
-        val wasmJsMain by getting {
+        val jsMain by getting {
+            kotlin.srcDir("src/wasmJsMain/kotlin")
             dependencies {
                 implementation(libs.ktor.client.js)
             }

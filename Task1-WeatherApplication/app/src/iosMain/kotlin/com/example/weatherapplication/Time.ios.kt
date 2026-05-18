@@ -1,5 +1,5 @@
 package com.example.weatherapplication
 
-import platform.Foundation.NSDate
+import platform.posix.time
 
-actual fun currentTimeMillis(): Long = (NSDate().timeIntervalSince1970 * 1000.0).toLong()
+actual fun currentTimeMillis(): Long = time(null).toLong() * 1000L

@@ -7,4 +7,4 @@ actual class PlatformContext
 actual fun currentPlatform(): PlatformKind = PlatformKind.IOS
 
 actual fun currentLanguage(): String =
-    NSLocale.preferredLanguages.firstOrNull()?.toString()?.substringBefore('-') ?: "en"
+    NSLocale.currentLocale.languageCode ?: "en"
