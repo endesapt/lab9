@@ -46,6 +46,7 @@ jobs:
           version: "6.10.0"
           host: all_os
           target: wasm
+          arch: wasm_singlethread
           cache: true
       - name: Configure WebAssembly build
         run: qt-cmake -S Task3-Caclulator_Qt -B build/task3-wasm -G Ninja -DBUILD_TESTING=OFF
