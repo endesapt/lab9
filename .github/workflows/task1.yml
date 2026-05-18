@@ -68,19 +68,3 @@ jobs:
           cache: gradle
       - name: Build Web
         run: bash ./gradlew :app:jsBrowserDistribution --stacktrace
-
-  ios:
-    runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: Task1-WeatherApplication
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-          cache: gradle
-      - name: Build iOS simulator framework
-        run: bash ./gradlew :app:linkIosSimulatorArm64 --stacktrace
