@@ -32,6 +32,10 @@
 - проект остается на единой кодовой базе Compose Multiplatform
 - GitHub Actions собирает и проверяет Android, Desktop, Web и iOS-таргеты
 
+Скриншот:
+
+![WeatherApplication](../photos/WeatherForecast_precise_info.png)
+
 ## Задание 2. MyCalc
 
 Что было сделано для перехода на мультиплатформенную сборку:
@@ -91,6 +95,10 @@
 - добавлен CI для desktop/mobile/web-направлений
 - логика хранения и UI стали более пригодными для мультиплатформенного сценария
 
+Скриншот:
+
+![Qt Quick / QML](../photos/calculator_qt.png)
+
 ## Задание 4. Flutter
 
 Что было сделано для перехода на мультиплатформенную сборку:
@@ -133,12 +141,15 @@
 - единая кодовая база теперь лучше подходит для Android, iOS, Linux и Web
 - добавлены CI-сборки и тестовые проверки
 
+Скриншот:
+
+![Flutter](../photos/car_rental_working.png)
+
 ## Что добавлено в GitHub Actions
 
 В репозиторий добавлены/обновлены следующие workflow:
 
 - `.github/workflows/task1.yml`
-- `.github/workflows/task2.yml`
 - `.github/workflows/task3.yml`
 - `.github/workflows/task4.yml`
 
